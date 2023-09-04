@@ -18,7 +18,7 @@
     "allowJs" : true,
     // Search under node_modules for non-relative imports.
     "moduleResolution" : "node",
-    "importHelpers" : true,
+    "importHelpers" : false,
     "preserveConstEnums" : true,
     "experimentalDecorators" : true,
     "emitDecoratorMetadata" : true,

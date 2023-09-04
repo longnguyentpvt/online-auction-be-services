@@ -73,7 +73,7 @@ module.exports = {
       "error",
       {
         "multiline" : true,
-        "minProperties" : 1
+        "minProperties" : 2
       }
     ],
     "object-property-newline" : "error",
