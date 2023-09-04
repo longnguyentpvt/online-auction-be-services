@@ -1,0 +1,4 @@
+node_modules
+dist
+src/jarvis-serverless.ts
+func.js
