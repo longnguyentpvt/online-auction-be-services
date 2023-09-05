@@ -15,19 +15,21 @@ const {
 } = process.env;
 
 if (ENV === "production") {
-  console.log = () : void => {
+  console.log = (): void => {
   };
-  console.debug = () : void => {
+  console.debug = (): void => {
   };
+
+  // handle console error to log to system database
 }
 
 export const configuration = {
-  port : PORT,
-  env : ENV,
-  dbHost : DB_HOST,
-  dbPort : parseInt(DB_PORT),
-  dbUsn : DB_USN,
-  dbPassword : DB_PASSWORD,
-  dbName : DB_NAME
+  port: PORT,
+  env: ENV,
+  dbHost: DB_HOST,
+  dbPort: parseInt(DB_PORT),
+  dbUsn: DB_USN,
+  dbPassword: DB_PASSWORD,
+  dbName: DB_NAME
 };
 

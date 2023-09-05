@@ -1,9 +1,9 @@
 import { Transaction } from "sequelize";
 import sequelize from "./seq";
 
-type TransactionCallback<T> = (t : Transaction) => PromiseLike<T>;
+type TransactionCallback<T> = (t: Transaction) => PromiseLike<T>;
 
-export const config = async () : Promise<void> => {
+export const config = async (): Promise<void> => {
   try {
     await sequelize.authenticate();
     console.info("Connection has been established successfully.");
@@ -12,6 +12,6 @@ export const config = async () : Promise<void> => {
   }
 };
 
-export async function transaction<T>(callback : TransactionCallback<T>) : Promise<T> {
+export async function transaction<T>(callback: TransactionCallback<T>): Promise<T> {
   return await sequelize.transaction(callback);
 }
