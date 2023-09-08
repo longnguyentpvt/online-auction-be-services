@@ -2,11 +2,11 @@ import { NextFunction, Request, Response, Router } from "express";
 import moment from "moment-timezone";
 
 import { validateRequestScope } from "services/session-scope";
-import { retrieveAccountInfo } from "services/account";
+import { registerUserAccount, retrieveAccountInfo } from "services/account";
 
 import { ApiErrorCode, AppController } from "types/app";
-import { RetrieveAccountInfoError } from "types/services";
-import { AuthRequest } from "types/apis";
+import { AccountRegistrationError, RetrieveAccountInfoError } from "types/services";
+import { AccountDataResponse, AccountRegistrationRequestBody, AuthRequest } from "types/apis";
 
 class UserAccountCtrl implements AppController {
 
@@ -39,7 +39,7 @@ class UserAccountCtrl implements AppController {
 
   getInfoApi = async (
     req: AuthRequest,
-    res: Response,
+    res: Response<AccountDataResponse>,
     next: NextFunction
   ): Promise<void> => {
     try {
@@ -96,9 +96,70 @@ class UserAccountCtrl implements AppController {
     }
   };
 
+  registerApi = async (
+    req: Request<unknown, unknown, AccountRegistrationRequestBody>,
+    res: Response<AccountDataResponse>,
+    next: NextFunction
+  ): Promise<void> => {
+    try {
+      const {
+        email,
+        password,
+        name
+      } = req.body;
+
+      const {
+        errCode,
+        data
+      } = await registerUserAccount(email, password, name);
+      // console.log("error", errCode, { email, password, name });
+
+      if (errCode) {
+        let rpCode = ApiErrorCode.UNKNOWN,
+          rpMessage = "";
+        switch (errCode) {
+          case AccountRegistrationError.InvalidName:
+          case AccountRegistrationError.InvalidPassword:
+          case AccountRegistrationError.InvalidEmail:
+            rpCode = ApiErrorCode.INVALID_DATA;
+            rpMessage = "Request data is invalid!";
+            break;
+          case AccountRegistrationError.EmailExisted:
+            rpCode = ApiErrorCode.EXISTED;
+            rpMessage = "Email existed!";
+            break;
+        }
+
+        throw {
+          statusCode: 400,
+          rpCode,
+          rpMessage
+        };
+      }
+
+      const {
+        id,
+        fullName,
+        email: rpEmail,
+        balance,
+        lastBidDateTime
+      } = data;
+      res.status(200).send({
+        id,
+        fullName,
+        email: rpEmail,
+        balance,
+        lastBidDateTime
+      });
+    } catch (e) {
+      next(e);
+    }
+  };
+
   initRoute(): Router {
     const router = Router();
     router.post("/health-check", validateRequestScope(["super-admin"]), this.healthCheck);
+    router.post("/register", this.registerApi);
     router.get("/info", this.getInfoApi);
     return router;
   }

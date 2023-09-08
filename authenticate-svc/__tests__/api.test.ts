@@ -2,7 +2,6 @@ import request from "supertest";
 import { expect, test, describe } from "@jest/globals";
 
 import app from "../src/app";
-import { ApiErrorCode } from "../src/types/app";
 
 const sum = (a: number, b: number): number => a + b;
 test("adds 1 + 2 to equal 3", () => {

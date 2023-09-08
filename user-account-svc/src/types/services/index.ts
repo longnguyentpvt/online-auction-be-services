@@ -18,3 +18,10 @@ export enum RetrieveAccountInfoError {
   InactiveAccount = "InactiveAccount",
   NotFound = "NotFound"
 }
+
+export enum AccountRegistrationError {
+  InvalidName = "InvalidName",
+  InvalidEmail = "InvalidEmail",
+  InvalidPassword = "InvalidPassword",
+  EmailExisted = "EmailExisted"
+}

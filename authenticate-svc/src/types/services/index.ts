@@ -1,5 +1,3 @@
-import moment from "moment-timezone";
-
 export interface ResultWithError<T, E> {
   data?: T,
   errCode?: E
