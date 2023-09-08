@@ -9,7 +9,8 @@ export enum ApiErrorCode {
   UNKNOWN = "UNKNOWN",
   UNAUTHORIZED = "UNAUTHORIZED",
   INVALID_DATA = "INVALID_DATA",
-  EXISTED = "EXISTED"
+  EXISTED = "EXISTED",
+  NOT_FOUND = "NOT_FOUND"
 }
 
 export interface ApiError extends Partial<Error> {

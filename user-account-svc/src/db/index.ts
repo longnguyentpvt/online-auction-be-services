@@ -1,4 +1,4 @@
-import { Transaction } from "sequelize";
+import { Transaction, Sequelize } from "sequelize";
 import sequelize from "./seq";
 
 type TransactionCallback<T> = (t: Transaction) => PromiseLike<T>;
@@ -15,3 +15,9 @@ export const config = async (): Promise<void> => {
 export async function transaction<T>(callback: TransactionCallback<T>): Promise<T> {
   return await sequelize.transaction(callback);
 }
+
+export * from "./models/UserAccount";
+
+export const getSequelize = (): Sequelize => {
+  return sequelize;
+};

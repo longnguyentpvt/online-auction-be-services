@@ -1,4 +1,4 @@
-import { Sequelize } from "sequelize-typescript";
+import { Sequelize } from "sequelize";
 import { configuration } from "config";
 
 const {
@@ -17,7 +17,7 @@ const sequelize = new Sequelize(dbName, dbUsn, dbPassword, {
     max: 3,
     min: 0,
     idle: 5000,
-    acquire: 3000,
+    acquire: 10000,
     evict: 30000
   },
   define: {
@@ -25,7 +25,6 @@ const sequelize = new Sequelize(dbName, dbUsn, dbPassword, {
     underscored: true
   },
   sync: { force: false },
-  models: [__dirname + "/models"],
   logging: console.log
 });
 

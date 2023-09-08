@@ -1,61 +1,50 @@
 import {
   Model,
-  Column,
-  Table,
-  PrimaryKey,
-  DataType,
-  CreatedAt,
-  AutoIncrement,
-  UpdatedAt
-} from "sequelize-typescript";
+  DataTypes,
+  InferAttributes,
+  InferCreationAttributes,
+  CreationOptional
+} from "sequelize";
+import sequelize from "../seq";
 
 import { AppUserAccountStatus } from "types/db-models";
 
-@Table({ tableName: "app_user" })
-export class UserAccount extends Model {
+export class UserAccount
+  extends Model<InferAttributes<UserAccount>, InferCreationAttributes<UserAccount>> {
 
-  @AutoIncrement
-  @PrimaryKey
-  @Column(DataType.BIGINT)
-  public id!: number;
-
-  @Column({ type: DataType.STRING })
-  public username!: string;
-
-  @Column({ type: DataType.STRING })
-  public password!: string;
-
-  @Column({ type: DataType.STRING })
-  public email!: string;
-
-  @Column({ type: DataType.STRING })
-  public fullName!: string;
-
-  @Column({
-    type: DataType.BIGINT,
-    defaultValue: 0
-  })
-  public balance!: number;
-
-  @Column({
-    type: DataType.BIGINT,
-    defaultValue: 0
-  })
-  public balanceTransactionMark!: number;
-
-  @Column({
-    type: DataType.STRING,
-    defaultValue: AppUserAccountStatus.Disabled
-  })
-  public status!: AppUserAccountStatus;
-
-  @CreatedAt
-  @Column
-  public createdDateTime!: Date;
-
-  @UpdatedAt
-  @Column
-  public updatedDateTime!: Date;
+  declare id: number;
+  declare username: string;
+  declare password: string;
+  declare email: string;
+  declare fullName: string;
+  declare balance: number;
+  declare balanceTransactionMark: number;
+  declare lastBidDateTime: Date;
+  declare status: AppUserAccountStatus;
+  declare createdDateTime: CreationOptional<Date>;
+  declare updatedDateTime: CreationOptional<Date>;
 
 }
 
+UserAccount.init({
+  id: {
+    type: DataTypes.BIGINT,
+    primaryKey: true
+  },
+  username: { type: DataTypes.STRING },
+  password: { type: DataTypes.STRING },
+  email: { type: DataTypes.STRING },
+  fullName: { type: DataTypes.STRING },
+  balance: { type: DataTypes.BIGINT },
+  balanceTransactionMark: { type: DataTypes.BIGINT },
+  lastBidDateTime: { type: DataTypes.DATE },
+  status: { type: DataTypes.STRING },
+  createdDateTime: { type: DataTypes.DATE },
+  updatedDateTime: { type: DataTypes.DATE }
+}, {
+  sequelize,
+  modelName: "app_user",
+  freezeTableName : true,
+  createdAt: "createdDateTime",
+  updatedAt: "updatedDateTime"
+});

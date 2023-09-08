@@ -1,7 +1,6 @@
 import express, { Application, NextFunction, Request, Response } from "express";
 import bodyParser from "body-parser";
 import cors from "cors";
-import http, { Server as HttpServer } from "http";
 
 import UserAccountCtrl from "controllers/user-account-ctrl";
 
@@ -11,14 +10,12 @@ import { ApiError, ApiErrorCode } from "types/app";
 
 class App {
   public app: Application;
-  public server: HttpServer;
 
   // public routes: Routes = new Routes();
   // public scheduler : Scheduler = new Scheduler();
 
   constructor() {
     this.app = express();
-    this.server = http.createServer(this.app);
 
     dbConfig();
 
@@ -39,6 +36,22 @@ class App {
   private initializeMiddlewares(): void {
     this.app.use(cors());
     this.app.use(bodyParser.json({ limit: "5mb" }));
+
+    // add middleware to extract request user info from auth service
+    this.app.use((req: Request, res : Response, next : NextFunction) => {
+      const accountId = req.header("X-Account-Id");
+      const scopeStr = req.header("X-Account-Scopes");
+      if (accountId) {
+        const scopes = !!scopeStr ? scopeStr.split(",") : [];
+
+        req["account"] = {
+          id : parseInt(accountId),
+          scopes
+        };
+      }
+
+      next();
+    });
   }
 
   private addErrorHandler(): void {
@@ -79,4 +92,4 @@ class App {
   }
 }
 
-export default new App().server;
+export default new App().app;
