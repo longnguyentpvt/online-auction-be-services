@@ -41,12 +41,14 @@ class App {
     this.app.use((req: Request, res : Response, next : NextFunction) => {
       const accountId = req.header("X-Account-Id");
       const scopeStr = req.header("X-Account-Scopes");
+      const token = req.header("Access-Token");
       if (accountId) {
         const scopes = !!scopeStr ? scopeStr.split(",") : [];
 
         req["account"] = {
           id : parseInt(accountId),
-          scopes
+          scopes,
+          token
         };
       }
 

@@ -29,6 +29,28 @@ describe("Test Controller Apis", () => {
     // });
   });
 
+  test("Account Authentication Api - Expect Success Response", async (): Promise<void> => {
+    const userId = 1694016321406;
+    const username = "tester1@gmail.com";
+    const password = "qwerty123";
+    const {
+      statusCode,
+      body
+    } = await request(app)
+      .post("/authenticate/account")
+      .send({
+        username,
+        password
+      });
+
+    expect(statusCode).toBe(200);
+
+    expect(body).toMatchObject({
+      id : userId,
+      email : username
+    });
+  });
+
   // test("Account Info Api - Error Response", async (): Promise<void> => {
   //   const userId = 1694016321407;
   //   const {

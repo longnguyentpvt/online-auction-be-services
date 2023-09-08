@@ -5,7 +5,7 @@ export interface ResultWithError<T, E> {
   errCode?: E
 }
 
-export type UserAccountDto = {
+export type TokenValidatedResult = {
   id: number,
   fullName: string,
   email: string,
@@ -15,5 +15,17 @@ export type UserAccountDto = {
 export enum ProcessAccessTokenError {
   InvalidToken = "InvalidToken",
   ExpiredToken = "ExpiredToken",
+  InactiveAccount = "InactiveAccount"
+}
+
+export type AccountAuthenticatedResult = {
+  id: number,
+  fullName: string,
+  email: string
+}
+
+export enum AccountAuthenticateError {
+  InvalidUsernameOrPassword = "InvalidUsernameOrPassword",
+  IncorrectPassword = "IncorrectPassword",
   InactiveAccount = "InactiveAccount"
 }

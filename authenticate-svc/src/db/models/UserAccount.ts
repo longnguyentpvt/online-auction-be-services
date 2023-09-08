@@ -12,6 +12,8 @@ export class UserAccount
   extends Model<InferAttributes<UserAccount>, InferCreationAttributes<UserAccount>> {
 
   declare id: number;
+  declare username: string;
+  declare password: string;
   declare email: string;
   declare fullName: string;
   declare status: AppUserAccountStatus;
@@ -24,6 +26,8 @@ UserAccount.init({
     type: DataTypes.BIGINT,
     primaryKey: true
   },
+  username: { type: DataTypes.STRING },
+  password: { type: DataTypes.STRING },
   email: { type: DataTypes.STRING },
   fullName: { type: DataTypes.STRING },
   status: { type: DataTypes.STRING },

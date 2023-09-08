@@ -6,6 +6,7 @@ import { retrieveAccountInfo } from "services/account";
 
 import { ApiErrorCode, AppController } from "types/app";
 import { RetrieveAccountInfoError } from "types/services";
+import { AuthRequest } from "types/apis";
 
 class UserAccountCtrl implements AppController {
 
@@ -37,12 +38,12 @@ class UserAccountCtrl implements AppController {
   };
 
   getInfoApi = async (
-    req: Request,
+    req: AuthRequest,
     res: Response,
     next: NextFunction
   ): Promise<void> => {
     try {
-      const rqAccountId = req["account"]?.id;
+      const rqAccountId = req.account.id;
 
       const {
         errCode,
@@ -76,7 +77,20 @@ class UserAccountCtrl implements AppController {
         };
       }
 
-      res.status(200).send(data);
+      const {
+        id,
+        fullName,
+        email,
+        balance,
+        lastBidDateTime
+      } = data;
+      res.status(200).send({
+        id,
+        fullName,
+        email,
+        balance,
+        lastBidDateTime
+      });
     } catch (e) {
       next(e);
     }
