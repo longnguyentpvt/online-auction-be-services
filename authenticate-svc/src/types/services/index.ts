@@ -19,7 +19,8 @@ export enum ProcessAccessTokenError {
 export type AccountAuthenticatedResult = {
   id: number,
   fullName: string,
-  email: string
+  email: string,
+  token: string
 }
 
 export enum AccountAuthenticateError {

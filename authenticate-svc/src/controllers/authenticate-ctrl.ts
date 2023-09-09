@@ -9,7 +9,7 @@ import {
 
 import { ApiErrorCode, AppController } from "types/app";
 import { ProcessAccessTokenError, AccountAuthenticateError } from "types/services";
-import { AccountCredentialAuthenticateRequest, AuthRequest } from "types/apis";
+import { AccountCredentialAuthenticateRequest, AccountCredentialAuthResponse, AuthRequest } from "types/apis";
 
 class AuthenticateCtrl implements AppController {
 
@@ -94,7 +94,7 @@ class AuthenticateCtrl implements AppController {
 
   authenticateCredentialApi = async (
     req: Request<unknown, unknown, AccountCredentialAuthenticateRequest>,
-    res: Response,
+    res: Response<AccountCredentialAuthResponse>,
     next: NextFunction
   ): Promise<void> => {
     try {
@@ -168,7 +168,7 @@ class AuthenticateCtrl implements AppController {
   initRoute(): Router {
     const router = Router();
     router.post("/health-check", validateRequestScope(["super-admin"]), this.healthCheck);
-    router.get("/access", this.authenticateTokenApi);
+    router.post("/access", this.authenticateTokenApi);
     router.post("/account", this.authenticateCredentialApi);
     router.post("/invalidate", this.invalidateAccessTokenApi);
     return router;

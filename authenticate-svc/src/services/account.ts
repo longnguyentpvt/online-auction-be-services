@@ -56,6 +56,7 @@ export const processAccessToken = async (token: string):
 
 export const authenticateUserAccount = async (username: string, password: string):
   Promise<ResultWithError<AccountAuthenticatedResult, AccountAuthenticateError>> => {
+  const nowMm = moment();
   if (!username || !password)
     return { errCode: AccountAuthenticateError.InvalidUsernameOrPassword };
 
@@ -76,11 +77,23 @@ export const authenticateUserAccount = async (username: string, password: string
   if (status === AppUserAccountStatus.Disabled)
     return { errCode: AccountAuthenticateError.InactiveAccount };
 
+  const randomToken = `online-auction-${ moment().toISOString() }`;
+  const accessToken = md5Hash(randomToken);
+  const expiry = moment(nowMm).add(7, "days");
+
+  await AccessToken.create({
+    token: accessToken,
+    userId: id,
+    invalidated: 0,
+    expiry: expiry.toDate()
+  });
+
   return {
     data : {
       id,
       email,
-      fullName
+      fullName,
+      token: accessToken
     }
   };
 };
