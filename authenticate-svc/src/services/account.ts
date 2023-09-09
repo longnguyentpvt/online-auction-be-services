@@ -30,6 +30,8 @@ export const processAccessToken = async (token: string):
     expiry,
     user
   } = accessTokenEntity ?? {};
+  if (!user)
+    return { errCode: ProcessAccessTokenError.InvalidToken };
   if (invalidated || moment(expiry).isBefore(nowMm))
     return { errCode: ProcessAccessTokenError.ExpiredToken };
 
