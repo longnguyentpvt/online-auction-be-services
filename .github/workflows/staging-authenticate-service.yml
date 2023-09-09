@@ -71,7 +71,7 @@ jobs:
           END
         env:
           SSH_KEY: ${{ secrets.STAGING_PEM }}
-          SSH_HOST: ${{ vars.STAGING_HOST }}
+          SSH_HOST: ${{ secrets.STAGING_HOST }}
 
       - name: Stop the app
         run: ssh staging 'cd /home/ubuntu/online-auction/authenticate-svc && sudo docker compose stop && sudo docker compose down --rmi all'
