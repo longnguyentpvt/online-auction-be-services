@@ -1,7 +1,8 @@
 FROM node:16
 WORKDIR /app
+
 COPY package.json .
-COPY ./dist/ .
+COPY ./dist ./
 RUN npm install --only=prod
 
-CMD npm start
+CMD ["node", "index.js"]
