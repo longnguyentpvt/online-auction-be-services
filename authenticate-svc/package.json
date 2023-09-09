@@ -8,7 +8,7 @@
     "build": "rm -f -r dist && tsc --project tsconfig.prod.json && tsc-alias",
     "start:dev": "nodemon",
     "lint": "eslint . --ext .ts",
-    "test": "jest"
+    "test": "jest --detectOpenHandles"
   },
   "dependencies": {
     "cors": "^2.8.5",

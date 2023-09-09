@@ -59,11 +59,11 @@ class AuthenticateCtrl implements AppController {
           rpMessage = "";
         switch (errCode) {
           case ProcessAccessTokenError.InvalidToken:
-            rpCode = ApiErrorCode.INVALID_DATA;
+            rpCode = ApiErrorCode.UNAUTHORIZED;
             rpMessage = "Token is invalid data!";
             break;
           case ProcessAccessTokenError.ExpiredToken:
-            rpCode = ApiErrorCode.INVALID_DATA;
+            rpCode = ApiErrorCode.UNAUTHORIZED;
             rpMessage = "Token is expired!";
             break;
           case ProcessAccessTokenError.InactiveAccount:
@@ -73,7 +73,7 @@ class AuthenticateCtrl implements AppController {
         }
 
         throw {
-          statusCode: 400,
+          statusCode: 401,
           rpCode,
           rpMessage
         };

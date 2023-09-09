@@ -16,7 +16,7 @@ describe("Test Controller Apis", () => {
       statusCode,
       headers
     } = await request(app)
-      .get("/authenticate/access")
+      .post("/authenticate/access")
       .set("Access-Token", token);
 
     expect(statusCode).toBe(200);

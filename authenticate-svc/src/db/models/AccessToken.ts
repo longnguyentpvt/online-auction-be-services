@@ -37,7 +37,7 @@ AccessToken.init({
   },
   userId: { type: DataTypes.BIGINT },
   invalidated: { type: DataTypes.TINYINT },
-  expiry: { type: DataTypes.STRING },
+  expiry: { type: DataTypes.DATE },
   createdDateTime: { type: DataTypes.DATE },
   updatedDateTime: { type: DataTypes.DATE }
 }, {
