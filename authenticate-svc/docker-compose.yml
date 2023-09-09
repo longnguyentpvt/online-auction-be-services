@@ -1,0 +1,8 @@
+version: "3.6"
+services:
+  auth-api-svc:
+    image: 9dsonglong/online-auction-authenticate-svc:latest
+    ports:
+      - "1990:8080"
+    volumes:
+      - ./.env:/app/.env:ro

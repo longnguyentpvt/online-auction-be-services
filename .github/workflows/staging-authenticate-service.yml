@@ -56,3 +56,25 @@ jobs:
           context: ./authenticate-svc
           push: true
           tags: 9dsonglong/online-auction-authenticate-svc:latest
+
+      - name: Configure SSH
+        run: |
+          mkdir -p ~/.ssh/
+          echo "$SSH_KEY" > ~/.ssh/staging.key
+          chmod 600 ~/.ssh/staging.key
+          cat >>~/.ssh/config <<END
+          Host staging
+            HostName $SSH_HOST
+            User ubuntu
+            IdentityFile ~/.ssh/staging.key
+            StrictHostKeyChecking no
+          END
+        env:
+          SSH_KEY: ${{ secrets.STAGING_PEM }}
+          SSH_HOST: ${{ vars.STAGING_HOST }}
+
+      - name: Stop the app
+        run: ssh staging 'cd /home/ubuntu/online-auction/authenticate-svc && sudo docker compose stop && sudo docker compose down --rmi all'
+
+      - name: Start the app
+        run: ssh staging 'cd /home/ubuntu/online-auction/authenticate-svc && sudo docker compose pull && sudo docker compose up --no-start && sudo docker compose start'
