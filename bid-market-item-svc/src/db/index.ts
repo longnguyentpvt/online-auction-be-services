@@ -24,8 +24,11 @@ export async function transaction<T>(callback: TransactionCallback<T>): Promise<
   return await sequelize.transaction(callback);
 }
 
+export * from "./models/AccountTransaction";
 export * from "./models/UserAccount";
 export * from "./models/MarketItem";
+export * from "./models/MarketItemBidder";
+export * from "./models/MarketItemBid";
 
 export const getSequelize = (): Sequelize => {
   return sequelize;

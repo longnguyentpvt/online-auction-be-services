@@ -2,9 +2,10 @@ import express, { Application, NextFunction, Request, Response } from "express";
 import bodyParser from "body-parser";
 import cors from "cors";
 
-import MarketItemCtrl from "controllers/market-item-ctrl";
-
 import { config as dbConfig } from "db";
+
+import MarketItemCtrl from "controllers/market-item-ctrl";
+import MarketItemBidCtrl from "controllers/market-item-bid-ctrl";
 
 import { ApiError, ApiErrorCode } from "types/app";
 
@@ -28,9 +29,11 @@ class App {
   }
 
   private initControllers(): void {
-    const balanceCtrl = new MarketItemCtrl();
+    const marketItemCtrl = new MarketItemCtrl();
+    const itemBidCtrl = new MarketItemBidCtrl();
 
-    this.app.use("/market/items", balanceCtrl.initRoute());
+    this.app.use("/market/items", marketItemCtrl.initRoute());
+    this.app.use("/market/item/bid", itemBidCtrl.initRoute());
   }
 
   private initializeMiddlewares(): void {

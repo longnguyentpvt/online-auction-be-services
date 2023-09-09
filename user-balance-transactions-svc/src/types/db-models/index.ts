@@ -1,7 +1,8 @@
 export enum TransactionType {
   Withdrawn = "Withdrawn",
   Deposit = "Deposit",
-  TransferIn = "TransferIn"
+  TransferIn = "TransferIn",
+  Bid = "Bid"
 }
 
 export enum TransactionStatus {

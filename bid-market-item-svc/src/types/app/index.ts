@@ -10,7 +10,9 @@ export enum ApiErrorCode {
   UNAUTHORIZED = "UNAUTHORIZED",
   INVALID_DATA = "INVALID_DATA",
   EXISTED = "EXISTED",
-  NOT_FOUND = "NOT_FOUND"
+  NOT_FOUND = "NOT_FOUND",
+  INSUFFICIENT_BALANCE = "INSUFFICIENT_BALANCE",
+  OVER_LIMIT = "OVER_LIMIT"
 }
 
 export interface ApiError extends Partial<Error> {

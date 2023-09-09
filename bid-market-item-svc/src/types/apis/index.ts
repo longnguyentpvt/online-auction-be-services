@@ -1,6 +1,7 @@
 import { Request } from "express";
 import * as core from "express-serve-static-core";
 import moment from "moment-timezone";
+import { BidStatus } from "types/db-models";
 
 export interface AuthRequest<
   P = core.ParamsDictionary,
@@ -37,4 +38,28 @@ export type MarketItemResponse = {
   createdDateTime : moment.Moment,
   publishedDateTime : moment.Moment,
   endDateTime : moment.Moment
+}
+
+export type NewItemRequestBody = {
+  name: string
+};
+
+export type PublishItemRequestBody = {
+  itemId: number,
+  duration: number,
+  startPrice: number
+}
+
+export type ItemBidRequestBody = {
+  itemId: number,
+  price: number
+}
+
+export type ItemBidResponse = {
+  id: number,
+  bidderId: number,
+  itemId: number,
+  price: number,
+  status: BidStatus,
+  createdDateTime : moment.Moment
 }
