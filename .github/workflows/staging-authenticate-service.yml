@@ -43,7 +43,16 @@ jobs:
           yarn install
 
       - name: 'Unit Test'
-        run: yarn test
+        run: |
+          echo 'ENV=production' >> .env
+          echo 'PORT=8080' >> .env
+          echo 'DB_HOST=${{ secrets.STAGING_DB_HOST }}' >> .env
+          echo 'DB_PORT=3306' >> .env
+          echo 'DB_USN=${{ secrets.STAGING_DB_USN }}' >> .env
+          echo 'DB_PASSWORD="${{ secrets.STAGING_DB_PASSWORD }}"' >> .env
+          echo 'DB_NAME=online_auction_db' >> .env
+          cat .env
+          yarn test
 
       - name: 'Build'
         run: yarn build
