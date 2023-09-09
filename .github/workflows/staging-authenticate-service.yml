@@ -1,0 +1,58 @@
+name: Authenticate Service - Staging
+
+on:
+  push:
+    tags:
+      - staging/authenticate-svc/*
+
+jobs:
+  build:
+
+    runs-on: ubuntu-22.04
+    defaults:
+      run:
+        working-directory: ./authenticate-svc
+
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v2
+        with:
+          node-version: '16'
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v2
+
+      - name: Login to DockerHub
+        uses: docker/login-action@v2
+        with:
+          username: ${{ secrets.DOCKER_HUB_USERNAME }}
+          password: ${{ secrets.DOCKER_HUB_PASSWORD }}
+
+      - name: 'Get tag version'
+        run: |
+          echo "Tag name from GITHUB_REF_NAME: $GITHUB_REF_NAME"
+          echo "Tag name from github.ref_name: ${{  github.ref_name }}"      
+          TAGNAME="$GITHUB_REF_NAME"
+          VER=${TAGNAME##*/}
+          echo "Version $VER"
+          echo "VERSION=$VER" >> $GITHUB_ENV
+
+      - name: 'Install dependencies and build'
+        run: |
+          npm install -g yarn
+          yarn install
+          yarn build
+
+      - name: Build and push image
+        uses: docker/build-push-action@v3
+        with:
+          context: ./authenticate-svc
+          push: true
+          tags: 9dsonglong/online-auction-authenticate-svc:${{ env.VERSION }}
+
+      - name: Build and push image
+        uses: docker/build-push-action@v3
+        with:
+          context: ./authenticate-svc
+          push: true
+          tags: 9dsonglong/online-auction-authenticate-svc:latest
