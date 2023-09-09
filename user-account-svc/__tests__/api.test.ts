@@ -30,7 +30,7 @@ describe("Test Controller Apis", () => {
   });
 
   test("Account Info Api - Error Response", async (): Promise<void> => {
-    const userId = 1694016321407;
+    const userId = 9999;
     const {
       statusCode,
       body
