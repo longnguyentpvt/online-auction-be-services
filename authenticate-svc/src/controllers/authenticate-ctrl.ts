@@ -136,13 +136,15 @@ class AuthenticateCtrl implements AppController {
       const {
         id,
         fullName,
-        email
+        email,
+        token
       } = data;
 
       res.status(200).send({
         id,
         fullName,
-        email
+        email,
+        accessToken: token
       });
     } catch (e) {
       next(e);
