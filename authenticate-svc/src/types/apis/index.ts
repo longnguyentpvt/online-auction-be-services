@@ -1,4 +1,5 @@
 import { Request } from "express";
+import moment from "moment-timezone";
 
 export type AccountCredentialAuthenticateRequest = {
   username: string,
@@ -9,7 +10,8 @@ export type AccountCredentialAuthResponse = {
   id: number,
   fullName: string,
   email: string,
-  accessToken: string
+  accessToken: string,
+  tokenExpiry: moment.Moment
 }
 
 export interface AuthRequest extends Request {

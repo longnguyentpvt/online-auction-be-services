@@ -95,7 +95,8 @@ export const authenticateUserAccount = async (username: string, password: string
       id,
       email,
       fullName,
-      token: accessToken
+      token: accessToken,
+      expiry
     }
   };
 };

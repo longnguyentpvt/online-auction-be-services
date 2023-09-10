@@ -1,3 +1,5 @@
+import moment from "moment-timezone";
+
 export interface ResultWithError<T, E> {
   data?: T,
   errCode?: E
@@ -20,7 +22,8 @@ export type AccountAuthenticatedResult = {
   id: number,
   fullName: string,
   email: string,
-  token: string
+  token: string,
+  expiry: moment.Moment
 }
 
 export enum AccountAuthenticateError {
