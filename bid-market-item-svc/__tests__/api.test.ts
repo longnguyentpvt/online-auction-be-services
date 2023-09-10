@@ -38,8 +38,11 @@ describe("Test Controller Apis", () => {
 
     expect(count).toBeDefined();
     expect(items.length).toBeDefined();
-  }, 5000);
 
+    const item = items[0];
+    expect(item.name).toBeDefined();
+    expect(item.released).toBeDefined();
+  }, 5000);
 
   const userId = 1694016321406;
   const bidUserId = 1694016321407;
