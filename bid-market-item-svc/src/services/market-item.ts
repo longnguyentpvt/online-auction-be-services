@@ -298,11 +298,23 @@ export const newBidOnItem = async (
       status: bidStatus
     }, { transaction });
 
-    await MarketItemBidder.create({
-      itemId,
-      bidderId: userId,
-      amount: newPrice
-    }, { transaction });
+    if (holdBalance > 0) {
+      await MarketItemBidder.update({
+        amount: newPrice
+      }, {
+        where : {
+          itemId,
+          bidderId: userId
+        },
+        transaction
+      });
+    } else {
+      await MarketItemBidder.create({
+        itemId,
+        bidderId: userId,
+        amount: newPrice
+      }, { transaction });
+    }
 
     return itemBid;
   });
