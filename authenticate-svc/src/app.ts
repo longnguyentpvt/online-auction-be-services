@@ -34,12 +34,7 @@ class App {
   }
 
   private initializeMiddlewares(): void {
-    this.app.use(cors({
-      origin: function (origin, callback) {
-        console.log("Cors middleware called");
-        callback(null, true);
-      }
-    }));
+    this.app.use(cors());
 
     this.app.use((req: Request, res: Response, next: NextFunction) => {
       console.log("Json middleware called", req.path);
