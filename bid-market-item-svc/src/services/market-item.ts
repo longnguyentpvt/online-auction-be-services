@@ -73,7 +73,8 @@ export const retrieveMarketItems = async (
       currentBidPrice,
       endDateTime,
       publishedDateTime,
-      createdDateTime
+      createdDateTime,
+      released
     } = row;
 
     return {
@@ -82,6 +83,7 @@ export const retrieveMarketItems = async (
       name,
       startPrice,
       currentBidPrice,
+      released: !!released,
       createdDateTime: moment(createdDateTime),
       endDateTime: moment(endDateTime),
       publishedDateTime: moment(publishedDateTime)
@@ -108,7 +110,8 @@ export const newItem = async (userId: number, name: string):
     name,
     startPrice: 0,
     currentBidPrice: 0,
-    bidProcessMark: 0
+    bidProcessMark: 0,
+    released: 0
   });
 
   const {
@@ -118,7 +121,8 @@ export const newItem = async (userId: number, name: string):
     currentBidPrice,
     endDateTime,
     publishedDateTime,
-    createdDateTime
+    createdDateTime,
+    released
   } = newItemEntity;
 
   return {
@@ -130,7 +134,8 @@ export const newItem = async (userId: number, name: string):
       currentBidPrice,
       createdDateTime: moment(createdDateTime),
       endDateTime: moment(endDateTime),
-      publishedDateTime: moment(publishedDateTime)
+      publishedDateTime: moment(publishedDateTime),
+      released: !!released
     }
   };
 };
@@ -179,7 +184,8 @@ export const publishItem = async (
     currentBidPrice,
     createdDateTime,
     publishedDateTime: itemPublishedDateTime,
-    endDateTime: itemEndDateTime
+    endDateTime: itemEndDateTime,
+    released
   } = foundItem;
 
   return {
@@ -189,6 +195,7 @@ export const publishItem = async (
       name,
       startPrice: itemStartPrice,
       currentBidPrice,
+      released: !!released,
       createdDateTime: moment(createdDateTime),
       endDateTime: moment(itemEndDateTime),
       publishedDateTime: moment(itemPublishedDateTime)
@@ -219,12 +226,15 @@ export const newBidOnItem = async (
   const {
     ownerId: itemOwnerId,
     publishedDateTime,
+    released,
+    endDateTime,
     currentBidPrice,
     bidProcessMark
   } = foundItem;
 
   if (itemOwnerId === userId) return { errCode: NewBidError.IncorrectItem };
-  if (!publishedDateTime) return { errCode: NewBidError.ItemDraft };
+  if (!publishedDateTime || !!released || moment(endDateTime).isSameOrBefore(nowMm))
+    return { errCode: NewBidError.InactiveItem };
 
   newPrice = !newPrice ? 0 : Math.round(newPrice);
   if (isNaN(newPrice) || newPrice <= currentBidPrice)

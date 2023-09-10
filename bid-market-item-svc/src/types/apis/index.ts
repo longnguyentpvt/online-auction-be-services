@@ -35,6 +35,7 @@ export type MarketItemResponse = {
   name: string,
   startPrice: number,
   currentBidPrice: number,
+  released: boolean,
   createdDateTime : moment.Moment,
   publishedDateTime : moment.Moment,
   endDateTime : moment.Moment

@@ -21,6 +21,7 @@ export class MarketItem
   declare startPrice: number;
   declare currentBidPrice: number;
   declare bidProcessMark: number;
+  declare released: number;
   declare createdDateTime: CreationOptional<Date>;
   declare publishedDateTime: CreationOptional<Date>;
   declare endDateTime: CreationOptional<Date>;
@@ -42,6 +43,7 @@ MarketItem.init({
   startPrice: { type: DataTypes.BIGINT },
   currentBidPrice: { type: DataTypes.BIGINT },
   bidProcessMark: { type: DataTypes.BIGINT },
+  released: { type: DataTypes.TINYINT },
   createdDateTime: { type: DataTypes.DATE },
   publishedDateTime: { type: DataTypes.DATE },
   endDateTime: { type: DataTypes.DATE },
@@ -49,7 +51,7 @@ MarketItem.init({
 }, {
   sequelize,
   modelName: "market_item",
-  freezeTableName : true,
+  freezeTableName: true,
   createdAt: "createdDateTime",
   updatedAt: "updatedDateTime"
 });

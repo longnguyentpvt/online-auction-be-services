@@ -14,7 +14,8 @@ export type MarketItemDto = {
   currentBidPrice: number,
   createdDateTime : moment.Moment,
   publishedDateTime : moment.Moment,
-  endDateTime : moment.Moment
+  endDateTime : moment.Moment,
+  released: boolean
 }
 
 export enum NewItemError {
@@ -45,7 +46,7 @@ export enum NewBidError {
   IncorrectBidTime = "IncorrectBidTime",
   ItemNotFound = "ItemNotFound",
   IncorrectItem = "IncorrectItem",
-  ItemDraft = "ItemDraft",
+  InactiveItem = "InactiveItem",
   InvalidPrice = "InvalidPrice",
   InsufficientBalance = "InsufficientBalance"
 }

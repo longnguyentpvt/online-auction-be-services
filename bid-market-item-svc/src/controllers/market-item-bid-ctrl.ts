@@ -76,9 +76,9 @@ class MarketItemBidCtrl implements AppController {
             rpCode = ApiErrorCode.INVALID_DATA;
             rpMessage = "New price is lower than current bid!";
             break;
-          case NewBidError.ItemDraft:
-            rpCode = ApiErrorCode.INVALID_DATA;
-            rpMessage = "Item is still in draft!";
+          case NewBidError.InactiveItem:
+            rpCode = ApiErrorCode.INACTIVE;
+            rpMessage = "Item is in draft or released already!";
             break;
           case NewBidError.InvalidUser:
           case NewBidError.IncorrectItem:

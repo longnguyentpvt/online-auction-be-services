@@ -60,7 +60,8 @@ describe("Test Controller Apis", () => {
     expect(statusCode).toBe(200);
     expect(body).toMatchObject({
       name,
-      ownerId: userId
+      ownerId: userId,
+      released: false
     });
 
     newItemId = body.id;
