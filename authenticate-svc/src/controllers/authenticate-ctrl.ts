@@ -85,8 +85,8 @@ class AuthenticateCtrl implements AppController {
       } = data;
 
       res.setHeader("X-Account-Id", id);
-      res.setHeader("X-Account-Scopes", (permissionScopes ?? []).concat(","));
-      res.status(200).send();
+      res.setHeader("X-Account-Scopes", (permissionScopes ?? []).join(","));
+      res.sendStatus(200);
     } catch (e) {
       next(e);
     }
@@ -170,7 +170,7 @@ class AuthenticateCtrl implements AppController {
   initRoute(): Router {
     const router = Router();
     router.post("/health-check", validateRequestScope(["super-admin"]), this.healthCheck);
-    router.post("/access", this.authenticateTokenApi);
+    router.get("/access", this.authenticateTokenApi);
     router.post("/account", this.authenticateCredentialApi);
     router.post("/invalidate", this.invalidateAccessTokenApi);
     return router;

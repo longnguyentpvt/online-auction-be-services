@@ -1,0 +1,94 @@
+name: Bid Market Item Service - Staging
+
+on:
+  push:
+    tags:
+      - staging/bid-market-item-svc/*
+
+jobs:
+  build:
+
+    runs-on: ubuntu-22.04
+    defaults:
+      run:
+        working-directory: ./bid-market-item-svc
+
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v2
+        with:
+          node-version: '16'
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v2
+
+      - name: Login to DockerHub
+        uses: docker/login-action@v2
+        with:
+          username: ${{ secrets.DOCKER_HUB_USERNAME }}
+          password: ${{ secrets.DOCKER_HUB_PASSWORD }}
+
+      - name: 'Get tag version'
+        run: |
+          echo "Tag name from GITHUB_REF_NAME: $GITHUB_REF_NAME"
+          echo "Tag name from github.ref_name: ${{  github.ref_name }}"      
+          TAGNAME="$GITHUB_REF_NAME"
+          VER=${TAGNAME##*/}
+          echo "Version $VER"
+          echo "VERSION=$VER" >> $GITHUB_ENV
+
+      - name: 'Install dependencies'
+        run: |
+          npm install -g yarn
+          yarn install
+
+      - name: 'Unit Test'
+        run: |
+          echo 'ENV=production' >> .env
+          echo 'PORT=8080' >> .env
+          echo 'DB_HOST=${{ secrets.STAGING_DB_HOST }}' >> .env
+          echo 'DB_PORT=3306' >> .env
+          echo 'DB_USN=${{ secrets.STAGING_DB_USN }}' >> .env
+          echo 'DB_PASSWORD="${{ secrets.STAGING_DB_PASSWORD }}"' >> .env
+          echo 'DB_NAME=online_auction_db' >> .env
+          cat .env
+          yarn test
+
+      - name: 'Build'
+        run: yarn build
+
+      - name: Build and push image
+        uses: docker/build-push-action@v3
+        with:
+          context: ./bid-market-item-svc
+          push: true
+          tags: 9dsonglong/online-auction-user-account-service:${{ env.VERSION }}
+
+      - name: Build and push image
+        uses: docker/build-push-action@v3
+        with:
+          context: ./bid-market-item-svc
+          push: true
+          tags: 9dsonglong/online-auction-user-account-service:latest
+
+      - name: Configure SSH
+        run: |
+          mkdir -p ~/.ssh/
+          echo "$SSH_KEY" > ~/.ssh/staging.key
+          chmod 600 ~/.ssh/staging.key
+          cat >>~/.ssh/config <<END
+          Host staging
+            HostName $SSH_HOST
+            User ubuntu
+            IdentityFile ~/.ssh/staging.key
+            StrictHostKeyChecking no
+          END
+        env:
+          SSH_KEY: ${{ secrets.STAGING_PEM }}
+          SSH_HOST: ${{ secrets.STAGING_HOST }}
+
+      - name: Stop the app
+        run: ssh staging 'cd /home/ubuntu/online-auction/bid-market-item-svc && sudo docker compose stop && sudo docker compose down --rmi all'
+
+      - name: Start the app
+        run: ssh staging 'cd /home/ubuntu/online-auction/bid-market-item-svc && sudo docker compose pull && sudo docker compose up --no-start && sudo docker compose start'
