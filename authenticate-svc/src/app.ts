@@ -34,11 +34,27 @@ class App {
   }
 
   private initializeMiddlewares(): void {
-    this.app.use(cors());
-    this.app.use(bodyParser.json({ limit: "5mb" }));
+    this.app.use(cors({
+      origin: function (origin, callback) {
+        console.log("Cors middleware called");
+        callback(null, true);
+      }
+    }));
+
+    this.app.use((req: Request, res: Response, next: NextFunction) => {
+      console.log("Json middleware called", req.path);
+      if (req.path.indexOf("/authenticate/access") < 0) {
+        console.log("Json middleware processing", req.path);
+        bodyParser.json({
+          limit: "5mb"
+        })(req, res, next);
+      } else {
+        next();
+      }
+    });
 
     // add middleware to extract request user info from auth service
-    this.app.use((req: Request, res : Response, next : NextFunction) => {
+    this.app.use((req: Request, res: Response, next: NextFunction) => {
       const accountId = req.header("X-Account-Id");
       const scopeStr = req.header("X-Account-Scopes");
       const token = req.header("Access-Token");
@@ -46,7 +62,7 @@ class App {
         const scopes = !!scopeStr ? scopeStr.split(",") : [];
 
         req["account"] = {
-          id : parseInt(accountId),
+          id: parseInt(accountId),
           scopes,
           token
         };
