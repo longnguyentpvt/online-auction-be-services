@@ -174,6 +174,7 @@ export const publishItem = async (
   foundItem.publishedDateTime = nowMm.toDate();
   foundItem.endDateTime = endDateTime.toDate();
   foundItem.startPrice = startPrice;
+  foundItem.currentBidPrice = startPrice;
   await foundItem.save();
 
   const {
