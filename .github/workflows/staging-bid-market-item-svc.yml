@@ -62,14 +62,14 @@ jobs:
         with:
           context: ./bid-market-item-svc
           push: true
-          tags: 9dsonglong/online-auction-user-account-service:${{ env.VERSION }}
+          tags: 9dsonglong/online-auction-bid-market-item-service:${{ env.VERSION }}
 
       - name: Build and push image
         uses: docker/build-push-action@v3
         with:
           context: ./bid-market-item-svc
           push: true
-          tags: 9dsonglong/online-auction-user-account-service:latest
+          tags: 9dsonglong/online-auction-bid-market-item-service:latest
 
       - name: Configure SSH
         run: |
