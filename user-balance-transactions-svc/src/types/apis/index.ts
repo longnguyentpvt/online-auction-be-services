@@ -28,3 +28,8 @@ export type BalanceTransactionResponse = {
   status: TransactionStatus,
   transactionDateTime : moment.Moment
 }
+
+export type BidReleaseRequestBody = {
+  userId: number,
+  itemId: number
+}

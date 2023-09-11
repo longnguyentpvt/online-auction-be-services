@@ -1,15 +1,10 @@
 import moment from "moment-timezone";
 
-import {
-  literal,
-  transaction,
-  Transaction,
-  UserAccount,
-  AccountTransaction
-} from "db";
+import { AccountTransaction, literal, Transaction, transaction, UserAccount } from "db";
 
-import { DepositError, ResultWithError, AccountTransactionDto } from "types/services";
-import { TransactionStatus, TransactionType } from "types/db-models";
+import { AccountTransactionDto, DepositError, ResultWithError } from "types/services";
+import { ItemBidderReleaseStatus, TransactionStatus, TransactionType } from "types/db-models";
+import { MarketItemBidder } from "db/models/MarketItemBidder";
 
 export const depositToBalance = async (userId: number, amount: number):
   Promise<ResultWithError<AccountTransactionDto, DepositError>> => {
@@ -51,6 +46,86 @@ export const depositToBalance = async (userId: number, amount: number):
     }, {
       transaction
     });
+  });
+
+  const {
+    id,
+    amount: transactionAmount,
+    createdDateTime,
+    status,
+    type: transactionType
+  } = transactionEntity;
+
+  return {
+    data: {
+      id,
+      amount: transactionAmount,
+      status,
+      type: transactionType,
+      transactionDateTime: createdDateTime ? moment(createdDateTime) : null
+    }
+  };
+};
+
+export const releaseBidToBalance = async (userId: number, itemId: number):
+  Promise<ResultWithError<AccountTransactionDto, DepositError>> => {
+  if (!userId) return { errCode: DepositError.InvalidUser };
+
+  const foundBidder = await MarketItemBidder.findOne({
+    where: {
+      bidderId: userId,
+      itemId
+    }
+  });
+  if (!foundBidder) return { errCode: DepositError.InvalidUser };
+
+  const userAccountEntity = await UserAccount.findByPk(userId);
+  const {
+    amount
+  } = foundBidder;
+  const {
+    balance: currentBalance,
+    balanceTransactionMark
+  } = userAccountEntity;
+  const newBalance = currentBalance + amount;
+
+  const transactionEntity = await transaction(async (transaction: Transaction) => {
+    const [affectedCount] = await UserAccount.update({
+      balance: newBalance,
+      balanceTransactionMark: literal("balance_transaction_mark + 1")
+    }, {
+      where: {
+        id: userId,
+        balanceTransactionMark
+      },
+      transaction
+    });
+
+    const transactionStatus = affectedCount > 0 ?
+      TransactionStatus.Success : TransactionStatus.Failed;
+    const balanceTransaction = await AccountTransaction.create({
+      userId,
+      type: TransactionType.TransferIn,
+      amount,
+      status: transactionStatus
+    }, {
+      transaction
+    });
+
+    const releaseStatus = transactionStatus !== TransactionStatus.Failed ?
+      ItemBidderReleaseStatus.Success :
+      ItemBidderReleaseStatus.Failed;
+    await MarketItemBidder.update({
+      releaseStatus
+    }, {
+      where: {
+        itemId,
+        bidderId: userId
+      },
+      transaction
+    });
+
+    return balanceTransaction;
   });
 
   const {

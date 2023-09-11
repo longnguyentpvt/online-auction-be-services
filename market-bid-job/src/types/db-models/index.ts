@@ -10,6 +10,11 @@ export enum TransactionStatus {
   Success = "Success"
 }
 
+export enum BidStatus {
+  Failed = "Failed",
+  Success = "Success"
+}
+
 export enum ItemBidderReleaseStatus {
   Requested = "Requested",
   Success = "Success",
