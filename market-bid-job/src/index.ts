@@ -12,16 +12,13 @@ const main = (): void => {
   oneMinuteProcesses.push(releaseEndBid);
 
   const oneMinuteCronJob = new CronJob("0 * * * * *", () => {
+    console.log("oneMinuteCronJob called");
     for (const task of oneMinuteProcesses) {
       task();
     }
   });
 
-  for (const task of oneMinuteProcesses) {
-    task();
-  }
-
-  // oneMinuteCronJob.start();
+  oneMinuteCronJob.start();
 };
 
 main();

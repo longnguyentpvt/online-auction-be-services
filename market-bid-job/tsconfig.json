@@ -24,6 +24,9 @@
     "emitDecoratorMetadata" : true,
     "skipLibCheck" : true,
     "paths" : {
+      "apis/*" : [
+        "apis/*"
+      ],
       "config/*" : [
         "config/*"
       ],

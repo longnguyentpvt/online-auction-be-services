@@ -1,11 +1,13 @@
 import { MarketItem, MarketItemBidder, Op } from "db";
 import moment from "moment-timezone";
 import { ItemBidderReleaseStatus } from "types/db-models";
+import {
+  releaseBidApi
+} from "apis";
 
 const releaseBidderBalance = async (itemBidder: MarketItemBidder): Promise<void> => {
   try {
     const {
-      amount,
       itemId,
       bidderId,
       releaseStatus
@@ -28,6 +30,8 @@ const releaseBidderBalance = async (itemBidder: MarketItemBidder): Promise<void>
         itemId,
         bidderId
       });
+
+      await releaseBidApi(bidderId, itemId);
     }
   } catch (e) {
     console.error("Release item error", e);
@@ -75,5 +79,7 @@ export const releaseEndBid = async (): Promise<void> => {
     }
   });
 
-  endItems.forEach(releaseItemBid);
+  for (const item of endItems) {
+    await releaseItemBid(item);
+  }
 };

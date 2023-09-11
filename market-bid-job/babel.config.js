@@ -15,6 +15,7 @@ module.exports = {
       {
         "root": ["./src"],
         "alias": {
+          "apis": "./src/apis",
           "config": "./src/config",
           "controllers": "./src/controllers",
           "data": "./src/data",

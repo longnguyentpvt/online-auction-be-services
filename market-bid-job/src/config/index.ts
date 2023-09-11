@@ -12,7 +12,8 @@ const {
   DB_USN,
   DB_PASSWORD,
   DB_NAME,
-  SUPER_TOKEN
+  SUPER_TOKEN,
+  MAIN_HOST_API
 } = process.env;
 
 if (ENV === "production") {
@@ -32,6 +33,7 @@ export const configuration = {
   dbUsn: DB_USN,
   dbPassword: DB_PASSWORD,
   dbName: DB_NAME,
-  superAuthToken: SUPER_TOKEN
+  superAuthToken: SUPER_TOKEN,
+  mainApiHost: MAIN_HOST_API
 };
 
