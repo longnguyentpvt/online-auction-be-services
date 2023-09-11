@@ -42,18 +42,18 @@ All test cases is under folder __test__, to execute the test please run this com
 # How To deploy
 Repository is using docker and github tag for deployment
 
-#####staging/authenticate-svc/*
+##### staging/authenticate-svc/*
 - To deploy authenticate service
 
-#####staging/user-account-svc/*
+##### staging/user-account-svc/*
 - To deploy user account service
 
-#####staging/user-balance-transactions-svc/*
+##### staging/user-balance-transactions-svc/*
 - To deploy balance transaction service
 
-#####staging/bid-market-item-svc/*
+##### staging/bid-market-item-svc/*
 - To deploy bid market item service
 
-#####staging/market-bid-job/*
+##### staging/market-bid-job/*
 - To deploy market item bid job
 
