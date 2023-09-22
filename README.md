@@ -3,7 +3,7 @@ http://15.235.146.167:3100/app/user/signin
 
 - Can try with test credential below or create new account yourself on live site
 
-  jitera@test.com
+  user@test.com
 
   qwerty123
 
