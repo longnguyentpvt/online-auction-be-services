@@ -1,3 +1,6 @@
+# Project
+An online auction system where users can create and bid on items.
+
 # Live Demo
 http://15.235.146.167:3100/app/user/signin
 
